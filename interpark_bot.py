@@ -229,7 +229,7 @@ def load_chromdriver_normal(config_dict, driver_type):
 
     if not os.path.exists(chromedriver_path):
         print("WebDriver not exist, try to download to:", webdriver_path)
-        chromedriver_autoinstaller.install(path=webdriver_path, make_version_dir=False)
+        chromedriver_autoinstaller.install(path=webdriver_path)
     else:
         print("ChromeDriver exist:", chromedriver_path)
 
@@ -346,7 +346,7 @@ def load_chromdriver_uc(config_dict):
 
     if not os.path.exists(chromedriver_path):
         print("ChromeDriver not exist, try to download to:", webdriver_path)
-        chromedriver_autoinstaller.install(path=webdriver_path, make_version_dir=False)
+        chromedriver_autoinstaller.install(path=webdriver_path)
     else:
         print("ChromeDriver exist:", chromedriver_path)
 
@@ -903,7 +903,7 @@ def interpark_get_local_code(locale_title):
     if locale_title == "locale":
         code = "ko"
     if locale_title == "中文":
-        code = "zh-cn"
+        code = "zh"
     if locale_title == "日本語":
         code = "ja"
     return code
@@ -911,14 +911,14 @@ def interpark_get_local_code(locale_title):
 def interpark_change_locale(driver, config_dict):
     el_locale = None
     try:
-        el_locale = driver.find_element(By.CSS_SELECTOR, '#lang_title')
+        el_locale = driver.find_element(By.CSS_SELECTOR, 'body > main > nav > div > ul > li:nth-child(4) > div > div')
         current_locale = el_locale.text
+        
         if len(current_locale) > 0:
             if config_dict["locale"] != current_locale:
                 local_code = interpark_get_local_code(config_dict["locale"])
-                js = "fnc_changeLocale('%s');" % (local_code)
-                driver.set_script_timeout(1)
-                driver.execute_script(js)
+           
+                driver.get("https://www.globalinterpark.com/?lang=%s" % (local_code))
                 time.sleep(0.2)
     except Exception as exc:
         print(exc)
@@ -1341,10 +1341,10 @@ def interpart_time_auto_select(driver, config_dict):
     return is_time_assign_by_bot, is_select_exist
 
 def interpark_login(driver, account, password):
-    is_email_sent = assign_text(driver, By.CSS_SELECTOR, '#memEmail', account)
+    is_email_sent = assign_text(driver, By.CSS_SELECTOR, 'body > main > div.container__Container-sc-5ea7eb67-0.sc-5029253d-0.iLKpSA.cOojj > div.container__Container-sc-5ea7eb67-0.flex-box__FlexBox-sc-df192771-1.sc-de77312c-11.iLKpSA.gPRjNB.jyyofD > div:nth-child(1) > form > div.sc-de77312c-2.kjtPwd > input:nth-child(1)', account)
     is_password_sent = False
     if is_email_sent:
-        is_password_sent = assign_text(driver, By.CSS_SELECTOR, '#memPass', password, submit=True)
+        is_password_sent = assign_text(driver, By.CSS_SELECTOR, 'body > main > div.container__Container-sc-5ea7eb67-0.sc-5029253d-0.iLKpSA.cOojj > div.container__Container-sc-5ea7eb67-0.flex-box__FlexBox-sc-df192771-1.sc-de77312c-11.iLKpSA.gPRjNB.jyyofD > div:nth-child(1) > form > div.sc-de77312c-2.kjtPwd > input:nth-child(2)', password, submit=True)
     return is_password_sent
 
 def escape_to_first_tab(driver, main_window_handle):
@@ -2074,15 +2074,17 @@ def interpart_booking(driver, config_dict, ocr, is_step_1_submited):
 def interpark_main(driver, config_dict, url, ocr, interpark_dict):
     escape_to_first_tab(driver, interpark_dict["main_window_handle"])
 
-    if "globalinterpark.com/user/signin" in url:
+    if "globalinterpark.com/login" in url:
+       
         interpark_account = config_dict["advanced"]["interpark_account"]
         if len(interpark_account) > 2:
             interpark_login(driver, interpark_account, decryptMe(config_dict["advanced"]["interpark_password"]))
 
-    if "globalinterpark.com/main/main" in url:
+    if "www.globalinterpark.com/?lang" in url:
+      
         interpark_change_locale(driver, config_dict)
 
-    if "globalinterpark.com/detail/edetail?prdNo=" in url:
+    if "https://www.globalinterpark.com/product/" in url:
         if not interpark_dict["opener_popuped"]:
             interpark_dict["opener_popuped"] = interpark_event_detail(driver, config_dict, url)
     else:
@@ -2095,7 +2097,7 @@ def interpark_main(driver, config_dict, url, ocr, interpark_dict):
 
     return interpark_dict
 
-def main(args):
+def main(args):                                                                   
     config_dict = get_config_dict(args)
 
     driver = None
