@@ -1341,10 +1341,10 @@ def interpart_time_auto_select(driver, config_dict):
     return is_time_assign_by_bot, is_select_exist
 
 def interpark_login(driver, account, password):
-    is_email_sent = assign_text(driver, By.CSS_SELECTOR, 'body > main > div.container__Container-sc-5ea7eb67-0.sc-5029253d-0.iLKpSA.cOojj > div.container__Container-sc-5ea7eb67-0.flex-box__FlexBox-sc-df192771-1.sc-de77312c-11.iLKpSA.gPRjNB.jyyofD > div:nth-child(1) > form > div.sc-de77312c-2.kjtPwd > input:nth-child(1)', account)
+    is_email_sent = assign_text(driver, By.CSS_SELECTOR, 'body > main > div.container__Container-sc-5ea7eb67-0.sc-5029253d-0.iLKpSA.cOojj > div.container__Container-sc-5ea7eb67-0.flex-box__FlexBox-sc-df192771-1.sc-c6542827-11.iLKpSA.gPRjNB.fBBPOy > div:nth-child(1) > form > div.sc-c6542827-2.jEHtZw > input:nth-child(1)', account)
     is_password_sent = False
     if is_email_sent:
-        is_password_sent = assign_text(driver, By.CSS_SELECTOR, 'body > main > div.container__Container-sc-5ea7eb67-0.sc-5029253d-0.iLKpSA.cOojj > div.container__Container-sc-5ea7eb67-0.flex-box__FlexBox-sc-df192771-1.sc-de77312c-11.iLKpSA.gPRjNB.jyyofD > div:nth-child(1) > form > div.sc-de77312c-2.kjtPwd > input:nth-child(2)', password, submit=True)
+        is_password_sent = assign_text(driver, By.CSS_SELECTOR, 'body > main > div.container__Container-sc-5ea7eb67-0.sc-5029253d-0.iLKpSA.cOojj > div.container__Container-sc-5ea7eb67-0.flex-box__FlexBox-sc-df192771-1.sc-c6542827-11.iLKpSA.gPRjNB.fBBPOy > div:nth-child(1) > form > div.sc-c6542827-2.jEHtZw > input:nth-child(2)', password, submit=True)
     return is_password_sent
 
 def escape_to_first_tab(driver, main_window_handle):
@@ -1501,19 +1501,19 @@ def interpart_goto_step2(driver):
     if show_debug_message:
         print("is_step_1_on:", is_step_1_on)
     if is_step_1_on:
+        
         btn_next = None
         try:
             my_css_selector = "#LargeNextBtnImage"
             btn_next = driver.find_element(By.CSS_SELECTOR, my_css_selector)
             if not btn_next is None:
-                if btn_next.is_enabled():
-                    if btn_next.is_displayed():
-                        print("goto step 2")
-                        act = ActionChains(driver)
-                        act.move_to_element(btn_next).perform()
-                        time.sleep(0.2)
-                        btn_next.click()
-                        is_next_btn_press = True
+                print("goto step 2")
+                        
+                act = ActionChains(driver)
+                act.move_to_element(btn_next).perform()
+                time.sleep(0.5)
+                btn_next.click()
+                is_next_btn_press = True
         except Exception as exc:
             if show_debug_message:
                 print(exc)
@@ -1610,6 +1610,7 @@ def interpark_keyin_captcha_code(driver, form_verifyCode, answer = ""):
     return is_form_sumbited
 
 def interpart_auto_ocr(driver, ocr, previous_answer):
+
     show_debug_message = True       # debug.
     show_debug_message = False      # online
 
@@ -1626,6 +1627,13 @@ def interpart_auto_ocr(driver, ocr, previous_answer):
         pass
 
     if is_input_box_exist:
+        time.sleep(1)
+        try:
+            driver.find_element(By.CLASS_NAME, 'validationTxt').click()
+        except Exception as exc:
+            pass
+        
+        # assign_text(driver, By.CSS_SELECTOR, '#txtCaptcha', "")
         print("start to ddddocr")
         if show_debug_message:
             print("previous_answer:", previous_answer)
@@ -1672,6 +1680,7 @@ def interpart_auto_ocr(driver, ocr, previous_answer):
 
 def interpart_ocr_main(driver, config_dict, ocr):
     previous_answer = None
+    
     for redo_ocr in range(999):
         is_need_redo_ocr, previous_answer, is_form_sumbited = interpart_auto_ocr(driver, ocr, previous_answer)
         if not is_need_redo_ocr:
@@ -2075,7 +2084,7 @@ def interpark_main(driver, config_dict, url, ocr, interpark_dict):
     escape_to_first_tab(driver, interpark_dict["main_window_handle"])
 
     if "globalinterpark.com/login" in url:
-       
+        
         interpark_account = config_dict["advanced"]["interpark_account"]
         if len(interpark_account) > 2:
             interpark_login(driver, interpark_account, decryptMe(config_dict["advanced"]["interpark_password"]))
