@@ -1113,7 +1113,7 @@ def AutofillTab(root, config_dict, language_code, UI_PADDING_X):
     global txt_interpark_account
     txt_interpark_account_value = StringVar(frame_group_header, value=config_dict["advanced"]["interpark_account"].strip())
     txt_interpark_account = Entry(frame_group_header, width=30, textvariable = txt_interpark_account_value)
-    txt_interpark_account.configure(state=DISABLED)
+
     txt_interpark_account.grid(column=1, row=group_row_count, sticky = W)
 
     group_row_count +=1
@@ -1126,7 +1126,7 @@ def AutofillTab(root, config_dict, language_code, UI_PADDING_X):
     global txt_interpark_password
     txt_interpark_password_value = StringVar(frame_group_header, value=decryptMe(config_dict["advanced"]["interpark_password"].strip()))
     txt_interpark_password = Entry(frame_group_header, width=30, textvariable = txt_interpark_password_value, show="*")
-    txt_interpark_password.configure(state=DISABLED)
+ 
     txt_interpark_password.grid(column=1, row=group_row_count, sticky = W)
 
     group_row_count +=1
@@ -1180,7 +1180,7 @@ def AutofillTab(root, config_dict, language_code, UI_PADDING_X):
     global txt_user_name
     txt_user_name_value = StringVar(frame_user_profile, value=config_dict["user_name"])
     txt_user_name = Entry(frame_user_profile, width=30, textvariable = txt_user_name_value)
-    txt_user_name.configure(state=DISABLED)
+    # txt_user_name.configure(state=DISABLED)
     txt_user_name.grid(column=1, row=user_profile_row_count, sticky = W)
 
     user_profile_row_count+=1
@@ -1244,7 +1244,7 @@ def AutofillTab(root, config_dict, language_code, UI_PADDING_X):
     global txt_user_email
     txt_user_email_value = StringVar(frame_user_profile, value=config_dict["user_email"])
     txt_user_email = Entry(frame_user_profile, width=30, textvariable = txt_user_email_value)
-    txt_user_email.configure(state=DISABLED)
+ 
     txt_user_email.grid(column=1, row=user_profile_row_count, sticky = W)
 
     user_profile_row_count+=1
@@ -1257,7 +1257,7 @@ def AutofillTab(root, config_dict, language_code, UI_PADDING_X):
     global txt_user_phone_number
     txt_user_phone_number_value = StringVar(frame_user_profile, value=config_dict["user_phone_number"])
     txt_user_phone_number = Entry(frame_user_profile, width=30, textvariable = txt_user_phone_number_value)
-    txt_user_phone_number.configure(state=DISABLED)
+
     txt_user_phone_number.grid(column=1, row=user_profile_row_count, sticky = W)
 
     user_profile_row_count+=1
@@ -1270,7 +1270,7 @@ def AutofillTab(root, config_dict, language_code, UI_PADDING_X):
     global txt_user_cell_phone
     txt_user_cell_phone_value = StringVar(frame_user_profile, value=config_dict["user_cell_phone"])
     txt_user_cell_phone = Entry(frame_user_profile, width=30, textvariable = txt_user_cell_phone_value)
-    txt_user_cell_phone.configure(state=DISABLED)
+
     txt_user_cell_phone.grid(column=1, row=user_profile_row_count, sticky = W)
 
     user_profile_row_count+=1

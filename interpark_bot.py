@@ -1600,6 +1600,7 @@ def interpark_keyin_captcha_code(driver, form_verifyCode, answer = ""):
                 try:
                     form_verifyCode.send_keys(answer)
                     form_verifyCode.send_keys(Keys.ENTER)
+                    driver.find_element(By.CLASS_NAME, 'validationTxt').click()
                     is_form_sumbited = True
                 except Exception as exc:
                     print("send_keys ocr answer fail.")
@@ -1627,7 +1628,7 @@ def interpart_auto_ocr(driver, ocr, previous_answer):
         pass
 
     if is_input_box_exist:
-        time.sleep(1)
+        
         try:
             driver.find_element(By.CLASS_NAME, 'validationTxt').click()
         except Exception as exc:
@@ -1660,6 +1661,7 @@ def interpart_auto_ocr(driver, ocr, previous_answer):
 
             if len(ocr_answer)==6:
                 is_form_sumbited = interpark_keyin_captcha_code(driver, form_verifyCode, answer = ocr_answer)
+                
             else:
                 is_need_redo_ocr = True
                 if previous_answer != ocr_answer:
@@ -1719,10 +1721,27 @@ def interpark_divBookSeat(driver, config_dict, ocr):
             except Exception as exc:
                 pass
             interpart_ocr_main(driver, config_dict, ocr)
+            
             try:
                 driver.switch_to.default_content()
             except Exception as exc:
                 pass
+    try:
+        print('1111')
+        driver.switch_to.frame("ifrmSeat")
+        driver.switch_to.frame("ifrmSeatDetail")
+        time.sleep(0.5)
+
+        driver.execute_script("document.getElementsByClassName('stySeat')[0].click();document.getElementsByClassName('stySeat')[1].click();")
+        driver.switch_to.parent_frame()
+        driver.execute_script("document.getElementById('NextStepImage').click();")
+        
+        time.sleep(0.5)    
+
+        driver.switch_to.default_content()        
+    except Exception as exc:
+        pass
+    
 
 def interpart_price_seat_count(div_element):
     is_seat_assigned = False
